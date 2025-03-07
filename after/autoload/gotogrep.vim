@@ -1,4 +1,4 @@
-function operators#YankGrep(context = {}, type = '', onlyline = 0, includecolumn = 0) abort
+function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn = 0) abort
   if a:type == ''
     let context = #{
           \ dot_command: v:false,
@@ -113,7 +113,7 @@ function operators#YankGrep(context = {}, type = '', onlyline = 0, includecolumn
   endtry
 endfunction
 
-function! commands#Ggrep(args)
+function! gotogrep#Ggrep(args)
   let content = a:args
   if content =~# '^\([^:]\+\):\(\d\+\):\?\(\d*\)'
     let file = matchstr(content, '^\([^:]\+\)')
