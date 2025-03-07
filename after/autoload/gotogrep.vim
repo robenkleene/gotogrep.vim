@@ -5,6 +5,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
           \ extend_block: '',
           \ virtualedit: [&l:virtualedit, &g:virtualedit],
           \ only_line: a:onlyline,
+          \ cursor_position: getpos("."),
           \ include_column: a:includecolumn,
           \ }
     let &operatorfunc = function('gotogrep#YankGrep', [context])
@@ -65,6 +66,11 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
     " Vim `:grep` has trouble if there's not a blank space after the `:`
     " Use `:make` instead to process this output
     if a:context.only_line
+      " For the `only_line` variants we're passing in the `_` motion, e.g.,
+      " `gotogrep#YankGrep({}, '', 1) .. '_'`. `_` is a motion that moves to
+      " the first non-black character on a line, so restore the cursor
+      " position here
+      call setpos('.', a:context.cursor_position)
       let l:col = col('.')
       if a:context.include_column
         let l:result .= l:file_path.':'.l:idx.':'.l:col
