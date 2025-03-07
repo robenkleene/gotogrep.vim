@@ -7,7 +7,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
           \ only_line: a:onlyline,
           \ include_column: a:includecolumn,
           \ }
-    let &operatorfunc = function('operators#YankGrep', [context])
+    let &operatorfunc = function('gotogrep#YankGrep', [context])
     set virtualedit=block
     return 'g@'
   endif
