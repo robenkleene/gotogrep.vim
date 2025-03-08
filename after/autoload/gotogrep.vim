@@ -119,7 +119,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
   endtry
 endfunction
 
-function! gotogrep#Ggrep(args)
+function! gotogrep#Gtgrep(args)
   let content = a:args
   if content =~# '^\([^:]\+\):\(\d\+\):\?\(\d*\)'
     let file = matchstr(content, '^\([^:]\+\)')
@@ -141,12 +141,21 @@ function! gotogrep#Ggrep(args)
   endif
 endfunction
 
-function! gotogrep#OpenGrep() abort
+function! gotogrep#Gtgopencfile() abort
     let l:file = expand('<cfile>')
     let l:word = expand('<cWORD>')
     let l:match = matchlist(l:word, escape(l:file, '\') . ':\(\d\+\)')
     let l:lnum = !empty(l:match) ? l:match[1] : 1
     let l:file = fnamemodify(l:file, ':p')
     let l:grep = 'vscode://file/'.fnameescape(l:file).':'.l:lnum
+    execute 'Open ' . l:grep
+endfunction
+
+function! gotogrep#Gtgopen() abort
+    let l:col = col('.')
+    let l:lnum = line('.')
+    let l:file = expand('%')
+    let l:file = fnamemodify(l:file, ':p')
+    let l:grep = 'vscode://file/'.fnameescape(l:file).':'.l:lnum.':'.l:col
     execute 'Open ' . l:grep
 endfunction
