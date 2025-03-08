@@ -144,11 +144,9 @@ endfunction
 function! gotogrep#OpenGrep() abort
     let l:file = expand('<cfile>')
     let l:word = expand('<cWORD>')
-    let l:match = matchlist(l:word, '\V' . escape(l:file, '\') . ':(\d+)\>')
-    if !empty(l:match)
-        let l:lnum = l:match[1]
-    else
-        let l:lnum = 1  " Default to line 1 if no number is found
-    endif
-    echom l:file . ":" . l:lnum
+    let l:match = matchlist(l:word, escape(l:file, '\') . ':\(\d\+\)')
+    let l:lnum = !empty(l:match) ? l:match[1] : 1
+    let l:file = fnamemodify(l:file, ':p')
+    let l:grep = 'vscode://file/'.fnameescape(l:file).':'.l:lnum
+    execute 'Open ' . l:grep
 endfunction
