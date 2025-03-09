@@ -144,7 +144,7 @@ endfunction
 function! gotogrep#Gtgopencfile() abort
     let l:file = expand('<cfile>')
     if empty(l:file)
-        echoerr "Error: No file name under cursor."
+        echohl ErrorMsg | echomsg "No file name under cursor" | echohl None
         return
     endif    let l:word = expand('<cWORD>')
     let l:match = matchlist(l:word, escape(l:file, '\') . ':\(\d\+\)')
