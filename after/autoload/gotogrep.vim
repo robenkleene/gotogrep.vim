@@ -146,7 +146,8 @@ function! gotogrep#Gtgopencfile() abort
     if empty(l:file)
         echohl ErrorMsg | echomsg "No file name under cursor" | echohl None
         return
-    endif    let l:word = expand('<cWORD>')
+    endif
+    let l:word = expand('<cWORD>')
     let l:match = matchlist(l:word, escape(l:file, '\') . ':\(\d\+\)')
     let l:lnum = !empty(l:match) ? l:match[1] : 1
     let l:file = fnamemodify(l:file, ':p')
