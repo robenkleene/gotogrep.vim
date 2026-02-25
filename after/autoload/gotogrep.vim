@@ -141,25 +141,3 @@ function! gotogrep#Gtgrep(args)
   endif
 endfunction
 
-function! gotogrep#Gtgopencfile() abort
-    let l:file = expand('<cfile>')
-    if empty(l:file)
-        echohl ErrorMsg | echomsg "No file name under cursor" | echohl None
-        return
-    endif
-    let l:word = expand('<cWORD>')
-    let l:match = matchlist(l:word, escape(l:file, '\') . ':\(\d\+\)')
-    let l:lnum = !empty(l:match) ? l:match[1] : 1
-    let l:file = fnamemodify(l:file, ':p')
-    let l:grep = 'vscode://file/'.fnameescape(l:file).':'.l:lnum
-    execute 'Open ' . l:grep
-endfunction
-
-function! gotogrep#Gtgopen() abort
-    let l:col = col('.')
-    let l:lnum = line('.')
-    let l:file = expand('%')
-    let l:file = fnamemodify(l:file, ':p')
-    let l:grep = 'vscode://file/'.fnameescape(l:file).':'.l:lnum.':'.l:col
-    execute 'Open ' . l:grep
-endfunction
