@@ -104,15 +104,15 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
 
     " Use temporary buffer to force `TextYankPost` to trigger
     let @@ = l:result
-    new
-    setlocal buftype=nofile bufhidden=hide noswapfile
+    noautocmd new
+    setlocal buftype=nofile bufhidden=wipe noswapfile
     if a:context.only_line
       " Avoid yanking the line break for one line
       exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yg_'
     else
       exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yG'
     endif
-    bd!
+    noautocmd close!
 
   finally
     call setpos("'<", save.visual_marks[0])
