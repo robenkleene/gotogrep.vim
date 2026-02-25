@@ -1,4 +1,4 @@
-function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn = 0) abort
+function gyank#YankGrep(context = {}, type = '', onlyline = 0, includecolumn = 0) abort
   if a:type == ''
     let context = #{
           \ dot_command: v:false,
@@ -8,7 +8,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
           \ cursor_position: getpos("."),
           \ include_column: a:includecolumn,
           \ }
-    let &operatorfunc = function('gotogrep#YankGrep', [context])
+    let &operatorfunc = function('gyank#YankGrep', [context])
     set virtualedit=block
     return 'g@'
   endif
@@ -67,7 +67,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
     " Use `:make` instead to process this output
     if a:context.only_line
       " For the `only_line` variants we're passing in the `_` motion, e.g.,
-      " `gotogrep#YankGrep({}, '', 1) .. '_'`. `_` is a motion that moves to
+      " `gyank#YankGrep({}, '', 1) .. '_'`. `_` is a motion that moves to
       " the first non-black character on a line, so restore the cursor
       " position here
       call setpos('.', a:context.cursor_position)
@@ -119,7 +119,7 @@ function gotogrep#YankGrep(context = {}, type = '', onlyline = 0, includecolumn 
   endtry
 endfunction
 
-function! gotogrep#Gtgrep(args)
+function! gyank#Gtgrep(args)
   let content = a:args
   if content =~# '^\([^:]\+\):\(\d\+\):\?\(\d*\)'
     let file = matchstr(content, '^\([^:]\+\)')

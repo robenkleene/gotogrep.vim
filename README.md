@@ -1,4 +1,4 @@
-# Goto Grep
+# Gyank
 
 Vim plugin for yanking grep-formatted file references and navigating to them.
 
