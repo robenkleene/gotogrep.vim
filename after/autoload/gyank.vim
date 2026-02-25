@@ -146,9 +146,9 @@ function! gyank#YankPath(path) abort
   let l:register = v:register
   let @@ = a:path
   noautocmd new
-  setlocal buftype=nofile bufhidden=hide noswapfile
+  setlocal buftype=nofile bufhidden=wipe noswapfile
   exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yg_'
-  noautocmd bd!
+  noautocmd close!
   echom a:path
 endfunction
 
