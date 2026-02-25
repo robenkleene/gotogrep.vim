@@ -125,6 +125,10 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
 endfunction
 
 function! gyank#YankPath(path) abort
+  if empty(a:path)
+    echohl ErrorMsg | echomsg 'gyank: No file path available' | echohl None
+    return
+  endif
   let l:register = v:register
   let @@ = a:path
   new
