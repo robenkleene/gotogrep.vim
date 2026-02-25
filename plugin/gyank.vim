@@ -8,8 +8,8 @@ xnoremap <expr> gym gyank#Yank(#{format: 'markdown'})
 nnoremap <expr> gymm gyank#Yank(#{format: 'markdown'}, '', 1) .. '_'
 nnoremap <expr> gymM gyank#Yank(#{format: 'markdown'}, '', 1, 1) .. '_'
 
-nnoremap gypp <Cmd>call gyank#YankPath(expand('%:p:~'))<CR>
-nnoremap gypr <Cmd>call gyank#YankPath(expand('%:.'))<CR>
-nnoremap gypn <Cmd>call gyank#YankPath(expand('%:t'))<CR>
+nnoremap gypp <Cmd>call gyank#YankPath('p')<CR>
+nnoremap gypr <Cmd>call gyank#YankPath('r')<CR>
+nnoremap gypn <Cmd>call gyank#YankPath('n')<CR>
 
 command! -nargs=1 Gtgrep call gyank#Gtgrep(<q-args>)
