@@ -124,35 +124,32 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
   endtry
 endfunction
 
-function! gyank#YankPath(kind) abort
+" `expand('%')` returns empty in netrw buffers opened via `nvim .` or
+" `nvim <dir>` because the initial buffer is unnamed. Navigating into a
+" directory from within netrw does set `%`, so only the initial invocation
+" is affected. Fall back to `b:netrw_curdir` which netrw always sets to
+" the directory being browsed. The `&filetype == 'netrw'` guard ensures we
+" don't use `b:netrw_curdir` in a regular unnamed buffer.
+function! gyank#ResolvePath(modifier) abort
   let l:file = expand('%')
-  " `expand('%')` returns empty in netrw buffers opened via `nvim .` or
-  " `nvim <dir>` because the initial buffer is unnamed. Navigating into a
-  " directory from within netrw does set `%`, so only the initial invocation
-  " is affected. Fall back to `b:netrw_curdir` which netrw always sets to
-  " the directory being browsed. The `&filetype == 'netrw'` guard ensures we
-  " don't use `b:netrw_curdir` in a regular unnamed buffer.
   if empty(l:file) && &filetype == 'netrw' && exists('b:netrw_curdir')
     let l:file = b:netrw_curdir
   endif
-  if empty(l:file)
+  return empty(l:file) ? '' : fnamemodify(l:file, a:modifier)
+endfunction
+
+function! gyank#YankPath(path) abort
+  if empty(a:path)
     echohl ErrorMsg | echomsg 'gyank: No file path available' | echohl None
     return
   endif
-  if a:kind == 'p'
-    let l:path = fnamemodify(l:file, ':p:~')
-  elseif a:kind == 'r'
-    let l:path = fnamemodify(l:file, ':.')
-  else
-    let l:path = fnamemodify(l:file, ':t')
-  endif
   let l:register = v:register
-  let @@ = l:path
+  let @@ = a:path
   new
   setlocal buftype=nofile bufhidden=hide noswapfile
   exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yg_'
   bd!
-  echom l:path
+  echom a:path
 endfunction
 
 function! gyank#Gtgrep(args)
