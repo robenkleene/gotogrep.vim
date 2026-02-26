@@ -10,6 +10,6 @@ nnoremap <expr> gymM gyank#Yank(#{format: 'markdown'}, '', 1, 1) .. '_'
 
 nnoremap gypp <Cmd>call gyank#YankPath(gyank#ResolvePath(':p:~'))<CR>
 nnoremap gypr <Cmd>call gyank#YankPath(gyank#ResolvePath(':.'))<CR>
-nnoremap gypn <Cmd>call gyank#YankPath(gyank#ResolvePath(':t'))<CR>
+nnoremap gypt <Cmd>call gyank#YankPath(gyank#ResolvePath(':t'))<CR>
 
 command! -nargs=1 Gtgrep call gyank#Gtgrep(<q-args>)
