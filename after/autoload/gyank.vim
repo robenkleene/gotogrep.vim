@@ -102,14 +102,12 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
       endif
     endif
 
-    " Use temporary buffer to force `TextYankPost` to trigger
+    " Use temporary buffer to force `TextYankPost` to trigger. Use
+    " `tabnew`/`tabclose!` instead of `new`/`close!` so splits in the
+    " original tab are not disturbed. Without this, opening a help split
+    " (`:h expand()`) then yanking (`gypt`) causes the help window to resize.
     let @@ = l:result
-    " `noequalalways` prevents `new`/`close!` from resizing existing windows.
-    " Without this, opening a help split (`:h expand()`) then yanking (`gypt`)
-    " causes the help window to resize slightly.
-    let l:ea_save = &equalalways
-    set noequalalways
-    noautocmd new
+    noautocmd tabnew
     setlocal buftype=nofile bufhidden=wipe noswapfile
     if a:context.only_line
       " Avoid yanking the line break for one line
@@ -117,8 +115,7 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
     else
       exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yG'
     endif
-    noautocmd close!
-    let &equalalways = l:ea_save
+    noautocmd tabclose!
 
   finally
     call setpos("'<", save.visual_marks[0])
@@ -151,16 +148,13 @@ function! gyank#YankPath(path) abort
   endif
   let l:register = v:register
   let @@ = a:path
-  " `noequalalways` prevents `new`/`close!` from resizing existing windows.
-  " Without this, opening a help split (`:h expand()`) then yanking (`gypt`)
-  " causes the help window to resize slightly.
-  let l:ea_save = &equalalways
-  set noequalalways
-  noautocmd new
+  " Use `tabnew`/`tabclose!` instead of `new`/`close!` so splits in the
+  " original tab are not disturbed. Without this, opening a help split
+  " (`:h expand()`) then yanking (`gypt`) causes the help window to resize.
+  noautocmd tabnew
   setlocal buftype=nofile bufhidden=wipe noswapfile
   exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yg_'
-  noautocmd close!
-  let &equalalways = l:ea_save
+  noautocmd tabclose!
   echom a:path
 endfunction
 
