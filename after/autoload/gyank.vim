@@ -73,9 +73,9 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
         let l:ft = &filetype
         let l:line_content = getline('.')
         if a:context.include_column
-          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. l:col .. ':' .. "\n" .. '```'
+          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. l:col .. "\n" .. '```'
         else
-          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. "\n" .. '```'
+          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. "\n" .. '```'
         endif
         let l:result ..= "\n\n" .. '``` ' .. l:ft .. "\n" .. l:line_content .. "\n" .. '```'
         echom l:file_path .. ':' .. l:idx
