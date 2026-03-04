@@ -89,7 +89,12 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
     else
       if a:context.format == 'markdown'
         let l:ft = &filetype
-        let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':1:' .. "\n" .. '```' .. "\n"
+        if a:context.include_column
+          let l:col = a:context.cursor_position[2]
+          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. l:col .. ':' .. "\n" .. '```' .. "\n"
+        else
+          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':1:' .. "\n" .. '```' .. "\n"
+        endif
         let l:result ..= "\n" .. '``` ' .. l:ft .. "\n" .. l:contents
         " Ensure the code block closing is on its own line
         if l:contents[-1:] != "\n"
