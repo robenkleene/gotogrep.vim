@@ -5,8 +5,8 @@ nnoremap <expr> gygG gyank#Yank({}, '', 1, 1) .. '_'
 
 nnoremap <expr> gym gyank#Yank(#{format: 'markdown'})
 xnoremap <expr> gym gyank#Yank(#{format: 'markdown'})
-nnoremap <expr> gymm gyank#Yank(#{format: 'markdown'}) .. '_'
-nnoremap <expr> gymM gyank#Yank(#{format: 'markdown'}, '', 0, 1) .. '_'
+nnoremap <expr> gymm gyank#Yank(#{format: 'markdown'}, '', 1) .. '_'
+nnoremap <expr> gymM gyank#Yank(#{format: 'markdown'}, '', 1, 1) .. '_'
 
 nnoremap gypp <Cmd>call gyank#YankPath(gyank#ResolvePath(':p:~'))<CR>
 nnoremap gypr <Cmd>call gyank#YankPath(gyank#ResolvePath(':.'))<CR>

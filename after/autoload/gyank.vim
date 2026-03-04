@@ -70,11 +70,14 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
       call setpos('.', a:context.cursor_position)
       let l:col = col('.')
       if a:context.format == 'markdown'
+        let l:ft = &filetype
+        let l:line_content = getline('.')
         if a:context.include_column
           let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. l:col .. ':' .. "\n" .. '```'
         else
           let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. "\n" .. '```'
         endif
+        let l:result ..= "\n\n" .. '``` ' .. l:ft .. "\n" .. l:line_content .. "\n" .. '```'
         echom l:file_path .. ':' .. l:idx
       else
         if a:context.include_column
@@ -89,12 +92,7 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
     else
       if a:context.format == 'markdown'
         let l:ft = &filetype
-        if a:context.include_column
-          let l:col = a:context.cursor_position[2]
-          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':' .. l:col .. ':' .. "\n" .. '```' .. "\n"
-        else
-          let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':1:' .. "\n" .. '```' .. "\n"
-        endif
+        let l:result = '``` grep' .. "\n" .. l:file_path .. ':' .. l:idx .. ':1:' .. "\n" .. '```' .. "\n"
         let l:result ..= "\n" .. '``` ' .. l:ft .. "\n" .. l:contents
         " Ensure the code block closing is on its own line
         if l:contents[-1:] != "\n"
@@ -114,7 +112,7 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
     let @@ = l:result
     noautocmd tabnew
     setlocal buftype=nofile bufhidden=wipe noswapfile
-    if a:context.only_line
+    if a:context.only_line && a:context.format != 'markdown'
       " Avoid yanking the line break for one line
       exe 'silent keepjumps normal! VPgg"' .. l:register .. 'yg_'
     else
