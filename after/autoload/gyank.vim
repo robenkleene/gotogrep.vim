@@ -1,5 +1,9 @@
 function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) abort
   if a:type == ''
+    if empty(expand('%:~'))
+      echohl ErrorMsg | echomsg 'gyank: No file path available' | echohl None
+      return ''
+    endif
     let context = #{
           \ dot_command: v:false,
           \ extend_block: '',
@@ -11,7 +15,7 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
           \ }
     let &operatorfunc = function('gyank#Yank', [context])
     set virtualedit=block
-    return 'g@'
+    return a:onlyline ? 'g@_' : 'g@'
   endif
 
   let save = #{
@@ -63,9 +67,8 @@ function gyank#Yank(context = {}, type = '', onlyline = 0, includecolumn = 0) ab
     let l:file_path = expand('%:~')
 
     if a:context.only_line
-      " For the `only_line` variants we're passing in the `_` motion, e.g.,
-      " `gyank#Yank({}, '', 1) .. '_'`. `_` is a motion that moves to
-      " the first non-blank character on a line, so restore the cursor
+      " For the `only_line` variants the operator runs against `_` (a motion
+      " to the first non-blank character on the line), so restore the cursor
       " position here
       call setpos('.', a:context.cursor_position)
       let l:col = col('.')
